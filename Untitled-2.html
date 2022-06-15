@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;1,300&Cormorant:wght@300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel ="stylesheet" href ="Untitled-1.css"></link>
+    <title>ToDo List</title>
+</head>
+<body>
+
+    <div class="fon">
+
+        <header>
+            <h1>TO DO List</h1>
+        </header>
+
+        <form>
+
+            <div class = "select">
+
+                <select name ="todos" class = "filter">
+                    <option value="Низкий">Низкий</option>
+                    <option value="Средний">Средний</option>
+                    <option value="Высокий">Высокий</option>
+                </select>
+            </div>
+
+            <input type="text"  class = "input">
+            <button class = "button" type ="submit"> 
+                <i class="dob">Добавить</i>
+            </button>
+            </input>
+
+         
+        </form>
+
+        <div class = "Sort">
+            <div class = "checkbox">
+                <div> 
+                    <input type="checkbox"  class="checkbox_val" checked onclick="getChecked()" id ="Choice1" name = "sort" value="Все"> 
+                    <lebel for = "Choice1">Все</lebel>
+                </div>
+                <div> 
+                    <input type="checkbox"  class="checkbox_val" onclick="getChecked_Low()" id ="Choice2"   name = "sort" value="Низкий"> 
+                    <lebel for = "Choice2">Низкий</lebel>
+                </div>
+                <div> 
+                    <input type="checkbox" class="checkbox_val" onclick="getChecked_Medium()" id ="Choice3"  name = "sort" value="Средний"> 
+                    <lebel for = "Choice3">Средний</lebel>
+                </div>
+                <div> 
+                    <input type="checkbox" class="checkbox_val" id ="Choice4" onclick="getChecked_High()" name = "sort" value="Высокий"> 
+                    <lebel for = "Choice4">Высокий</lebel>
+                </div>
+            </div>
+
+            <div class = "select2">
+                <select class="filter2" onclick="Sort()">
+                    <option value="Все">Сортировка</option>
+                    <option value="Недавние">Недавние</option>
+                    <option value="Старые">Старые</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="container">
+
+            <ul class = "list"> 
+            
+            </ul>
+        </div>
+
+    </div>
+
+ <script src="Untitled-3.js"></script>   
+</body>
+</html>
