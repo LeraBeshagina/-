@@ -92,8 +92,13 @@ form button:hover {
     color: rgb(36, 95, 18);
 }
 
+.done-button:hover::after {
+    background: rgb(36, 95, 18);
+    color: white;
+}
 .todo.completed {
     opacity: 0.4;
+
 }
 
 .todo.del_2 {
