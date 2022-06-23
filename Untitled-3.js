@@ -14,17 +14,16 @@ getTasks().then();
 
 async function getTasks() {
 
-    massiv = await GetReceive().then();
-    HTML_List();
+    massiv = await getReceive().then();
+    htmlList();
 }
 
 let currentTasks; //задачи на экране
 let massiv = [];
 let todoElem = [];
-let text_elem = [];
+let textElem = [];
 let count = 0;
 let countTask = 0;
-dat = [];
 
 function Task (text, prior, id) {
     this.text = text;
@@ -35,19 +34,17 @@ function Task (text, prior, id) {
 }
 
 
-function HTML_List(){
+function htmlList(){
     list.innerHTML = "";
-    dat = []
     for (let i = 0; i<massiv.length; i++){
         if (massiv[i].completed) {
-            list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
+            list.innerHTML += createD(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
         } else{
-            list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data, i);
-        }
-        dat.push(massiv[i].data)    
+            list.innerHTML += createF(massiv[i].text, massiv[i].prior, massiv[i].data, i);
+        } 
         }      
     todoElem = document.querySelectorAll(".todo");
-    text_elem = document.querySelectorAll(".text");
+    textElem = document.querySelectorAll(".text");
     checkbox1.checked = true;
     checkbox2.checked = false;
     checkbox3.checked = false;
@@ -70,15 +67,14 @@ function addTodo(event){
         task = new Task(input.value, select1.value, countTask);
         sendTask(task);
         massiv.push(task);
-        HTML_List();
-        dat.push(task.data);
+        htmlList();
         input.value = "";
         count ++;
        
     };
 };
 
- async function GetReceive (){
+ async function getReceive (){
    return await fetch("http://127.0.0.1:3000/items", {
     method: 'GET',
     headers: {'Content-Type': "application/json; charset=utf-8"}
@@ -93,7 +89,7 @@ function addTodo(event){
         })
     }
 
-    function PutTask(itemId, updatentask) {
+    function putTask(itemId, updatentask) {
         fetch(`http://127.0.0.1:3000/items/${itemId}`, { 
         method: 'PUT',
         headers: {'Content-Type': "application/json; charset=utf-8"},
@@ -101,8 +97,7 @@ function addTodo(event){
         })
     }
 
-    function DeleteTask(itemId) {
-        console.log(itemId)
+    function deleteTask(itemId) {
         fetch(`http://127.0.0.1:3000/items/${itemId}`, { 
         method: 'DELETE',
         })
@@ -112,13 +107,13 @@ function addTodo(event){
 async function Delete(index) {
     //const item = e.target;
     addEventListener
-    await DeleteTask(massiv[index].id);
+    await deleteTask(massiv[index].id);
     getTasks().then();
 
 };
 // функция "Сделано"
- async function Done(index) {
-    task_new = {
+ async function done(index) {
+    taskNew = {
     text: massiv[index].text,
     prior: massiv[index].prior,
     data: massiv[index].data,
@@ -126,34 +121,35 @@ async function Delete(index) {
     id: massiv[index].id,
     };
     todoElem[index].classList.add("completed");
-    await PutTask(massiv[index].id, task_new);  
+    
+    await putTask(massiv[index].id, taskNew);  
     getTasks().then();
 };
 
 // Функция изменения
-async function Change(index){
-  task_new = {
+async function change(index){
+  taskNew = {
   text: document.querySelector(`.text${index}`).value,
   prior: massiv[index].prior,
   data: massiv[index].data,
   completed: massiv[index].completed,
   id: massiv[index].id,
   };
-  await PutTask(massiv[index].id, task_new);
+  await putTask(massiv[index].id, taskNew);
   getTasks().then();
 
 }
 
-function Create_F(text_value,prioritet,date, index){
+function createF(textValue,priority,date, index){
     return `
     <div class = "todo">
     <div class = "todo2">
-    <li class = "item"><input type="text" onchange="Change(${index})" class = "text${index}" style="border: none;color:rgb(36, 95, 18);font-size: 1.5rem;" value = "${text_value}"></li>
-    <li class = "data">Приоритет: ${prioritet}</li>
+    <li class = "item"><input type="text" onchange="change(${index})" class = "text${index}" style="border: none;color:rgb(36, 95, 18);font-size: 1.5rem;" value = "${textValue}"></li>
+    <li class = "data">Приоритет: ${priority}</li>
     <li class = "data">Дата: ${date}</li>
     </div>
     <div class = "todo3">
-    <button onclick = "Done(${index})" class = "done-button"}>Сделано</button>
+    <button onclick = "done(${index})" class = "done-button"}>Сделано</button>
     <button  class = "del-button" onclick = "Delete(${index})">Удалить</button>
     </div>
     </div>`
@@ -161,16 +157,16 @@ function Create_F(text_value,prioritet,date, index){
 }
 
 
-function Create_d(text_value,prioritet,date, index){
+function createD(textValue,priority,date, index){
     return `
     <div class = "todo completed" >
     <div class = "todo2">
-    <li class = "item"><input type="text" onchange="Change(${index})" class = "text${index}" style="border: none;color:rgb(36, 95, 18);font-size: 1.5rem;" value = "${text_value}"></li>
-    <li class = "data">Приоритет: ${prioritet}</li>
+    <li class = "item"><input type="text" onchange="change(${index})" class = "text${index}" style="border: none;color:rgb(36, 95, 18);font-size: 1.5rem;" value = "${textValue}"></li>
+    <li class = "data">Приоритет: ${priority}</li>
     <li class = "data">Дата: ${date}</li>
     </div>
     <div class = "todo3">
-    <button onclick = "Done(${index})" class = "done-button"}>Сделано</button>
+    <button onclick = "done(${index})" class = "done-button"}>Сделано</button>
     <button  onclick = "Delete(${index})" class = "del-button">Удалить</button>
     </div>
     </div>`
@@ -178,38 +174,38 @@ function Create_d(text_value,prioritet,date, index){
 
 }
 // сортировка по датам
-function Sort(){
-    dat_sort_new = [];
-    dat_sort_old = [];
-    massiv_new = [];
+function sort(){
+    datSortNew = [];
+    datSortOld = [];
+    massivNew = [];
     for (let i=0; i<massiv.length; i++){
-        dat_sort_new.push(massiv[i].data);
-        dat_sort_old.push(massiv[i].data);
-        massiv_new.push(massiv[i]);
+        datSortNew.push(massiv[i].data);
+        datSortOld.push(massiv[i].data);
+        massivNew.push(massiv[i]);
     }
        if (select2.value == "Недавние"){
         list.innerHTML= "";
-           dat_sort_new.reverse();
-           for (let i = 0; i < massiv_new.length; i ++){
-            for (let j = 0; j < massiv_new.length; j ++){
-                if (dat_sort_new[i] == massiv_new[j].data){
-                    if (massiv_new[j].completed) {
-                        list.innerHTML += Create_d(massiv_new[j].text, massiv_new[j].prior, massiv_new[j].data, j); 
+           datSortNew.reverse();
+           for (let i = 0; i < massivNew.length; i ++){
+            for (let j = 0; j < massivNew.length; j ++){
+                if (datSortNew[i] == massivNew[j].data){
+                    if (massivNew[j].completed) {
+                        list.innerHTML += createD(massivNew[j].text, massivNew[j].prior, massivNew[j].data, j); 
                     } else{
-                        list.innerHTML += Create_F(massiv_new[j].text, massiv_new[j].prior, massiv_new[j].data, j);
+                        list.innerHTML += createF(massivNew[j].text, massivNew[j].prior, massivNew[j].data, j);
                     }
                 }
             }
            }
        }  if   (select2.value == "Старые"){
         list.innerHTML= "";
-        for (let i = 0; i < massiv_new.length; i ++){
-            for (let j = 0; j < massiv_new.length; j ++){
-                if (dat_sort_old[i] == massiv_new[j].data){
-                    if (massiv_new[j].completed) {
-                        list.innerHTML += Create_d(massiv_new[j].text, massiv_new[j].prior, massiv_new[j].data, j); 
+        for (let i = 0; i < massivNew.length; i ++){
+            for (let j = 0; j < massivNew.length; j ++){
+                if (datSortOld[i] == massivNew[j].data){
+                    if (massivNew[j].completed) {
+                        list.innerHTML += createD(massivNew[j].text, massivNew[j].prior, massivNew[j].data, j); 
                     } else{
-                        list.innerHTML += Create_F(massiv_new[j].text, massiv_new[j].prior, massiv_new[j].data, j);
+                        list.innerHTML += createF(massivNew[j].text, massivNew[j].prior, massivNew[j].data, j);
                     }
                 }
             }
@@ -217,263 +213,81 @@ function Sort(){
        }  
 }
 
-function Check(a) {
+function check(a) {
     if (a.checked == true){
         a.checked = false;
     } 
 }
 
-function getChecked_Low() {
-    let massiv2 = [];
+function sorting (sort1, sort2, sort3) {
     list.innerHTML = "";
-    Check(checkbox1);
-    if (checkbox2.checked== false && checkbox3.checked == false && checkbox4.checked == false) {
+    check(checkbox1);
+    if (!sort1.checked && !sort2.checked && !sort3.checked) {
         checkbox1.checked = true;
         getChecked();};
 
-    if (checkbox2.checked== true && checkbox3.checked == true && checkbox4.checked) {
+    if (sort1.checked && sort2.checked && sort3.checked) {
         checkbox1.checked = true;
         getChecked();
     }
-    if (checkbox2.checked== true && checkbox3.checked && checkbox4.checked == false){
-        massiv2 = [];
+    if (sort1.checked && sort2.checked && !sort3.checked){
       for (let i = 0; i<massiv.length; i++){
-          if(massiv[i].prior == "Средний" || massiv[i].prior == "Низкий"){
+          if(massiv[i].prior == sort1.value || massiv[i].prior == sort2.value){
             if (massiv[i].completed) {
-                list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
+                list.innerHTML += createD(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
             } else{
-                list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data, i);
+                list.innerHTML += createF(massiv[i].text, massiv[i].prior, massiv[i].data, i);
             }
-              massiv2.push(massiv[i].data);
           }
       }
     }
-    if (checkbox4.checked== true && checkbox2.checked && checkbox3.checked == false){
-         massiv2 = [];
+    if (sort1.checked && !sort2.checked && sort3.checked){
       for (let i = 0; i<massiv.length; i++){
-          if(massiv[i].prior == "Высокий" || massiv[i].prior == "Низкий"){
+          if(massiv[i].prior == sort1.value || massiv[i].prior == sort3.value){
             if (massiv[i].completed) {
-                list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
+                list.innerHTML += createD(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
             } else{
-                list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data, i);
+                list.innerHTML += createF(massiv[i].text, massiv[i].prior, massiv[i].data, i);
             }
-              massiv2.push(massiv[i].data);
           }
       }
     }
-    if (checkbox2.checked== true && checkbox3.checked == false && checkbox4.checked == false){
-        massiv2 = [];
+    if (sort1.checked && !sort2.checked && !sort3.checked){
       for (let i = 0; i<massiv.length; i++){
-          if(massiv[i].prior == "Низкий"){
+          if(massiv[i].prior == sort1.value){
             if (massiv[i].completed) {
-                list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
+                list.innerHTML += createD(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
             } else{
-                list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data, i);
+                list.innerHTML += createF(massiv[i].text, massiv[i].prior, massiv[i].data, i);
             }
-              massiv2.push(massiv[i].data);
           }
       }
     }
-    if (select2.value == "Недавние"){
-        list.innerHTML = "";
-        massiv2.reverse();
-        for (let i = 0; i<count; i++){
-            for (let j=0; j< count; j++){
-                if (massiv2[i] == massiv[j].data){
-                    if (massiv[i].completed) {
-                        list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
-                    } else{
-                        list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data, i);
-                    }
-                };
-            };
-        };
-    }
-    if (select2.value == "Cтарые"){
-        list.innerHTML = "";
-        for (let i = 0; i<count; i++){
-            for (let j=0; j< count; j++){
-                if (massiv2[i] == massiv[j].data){
-                    if (massiv[i].completed) {
-                        list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
-                    } else{
-                        list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data, i);
-                    }
-                };
-            };
-        };
-    }
+    
 }
 
-function getChecked_Medium() {
-
-    let massiv2 = [];
-    list.innerHTML = "";
-  Check(checkbox1);
-  if (checkbox2.checked== false && checkbox3.checked == false && checkbox4.checked == false) {
-    checkbox1.checked = true;
-    getChecked();};
-
-  if (checkbox2.checked== true && checkbox3.checked == true && checkbox4.checked) {
-      checkbox1.checked = true;
-      getChecked();
-  }
-  if (checkbox2.checked== true && checkbox3.checked && checkbox4.checked == false){
-    massiv2 = [];
-    for (let i = 0; i<massiv.length; i++){
-        if(massiv[i].prior == "Средний" || massiv[i].prior == "Низкий"){
-            if (massiv[i].completed) {
-                list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
-            } else{
-                list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data, i);
-            }
-        }
-    }
-  }
-  if (checkbox3.checked== true && checkbox4.checked && checkbox2.checked == false){
-    massiv2 = [];
-    for (let i = 0; i<massiv.length; i++){
-        if(massiv[i].prior == "Высокий" || massiv[i].prior == "Средний"){
-            if (massiv[i].completed) {
-                list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
-            } else{
-                list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data, i);
-            }
-        }
-    }
-  }
-  if (checkbox3.checked== true && checkbox2.checked == false && checkbox4.checked == false){
-    massiv2 = [];
-    for (let i = 0; i<massiv.length; i++){
-        if(massiv[i].prior == "Средний"){
-            if (massiv[i].completed) {
-                list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
-            } else{
-                list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data,  i);
-            }
-        }
-    }
-  }
-  if (select2.value == "Недавние"){
-    list.innerHTML = "";
-    massiv2.reverse();
-    for (let i = 0; i<count; i++){
-        for (let j=0; j< count; j++){
-            if (massiv2[i] == massiv[j].data){
-                if (massiv[i].completed) {
-                    list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
-                } else{
-                    list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data, i);
-                }
-            };
-        };
-    };
-}
-if (select2.value == "Cтарые"){
-    list.innerHTML = "";
-    for (let i = 0; i<count; i++){
-        for (let j=0; j< count; j++){
-            if (massiv2[i] == massiv[j].data){
-                if (massiv[i].completed) {
-                    list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
-                } else{
-                    list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data, i);
-                }
-            };
-        };
-    };
-}
+function getCheckedLow() {
+    sorting(checkbox2,checkbox3,checkbox4);
 }
 
-function getChecked_High() {
-    let massiv2 = [];
-    list.innerHTML = "";
-    Check(checkbox1);
-    if (checkbox2.checked== false && checkbox3.checked == false && checkbox4.checked == false) {
-        checkbox1.checked = true;
-        getChecked();}; 
+function getCheckedMedium() {
+    sorting(checkbox3,checkbox2,checkbox4);
+}
 
-    if (checkbox2.checked== true && checkbox3.checked == true && checkbox4.checked) {
-        checkbox1.checked = true;
-        getChecked();
-    }
-    if (checkbox4.checked== true && checkbox2.checked && checkbox3.checked == false){
-         massiv2 = [];
-      for (let i = 0; i<massiv.length; i++){
-          if(massiv[i].prior == "Высокий" || massiv[i].prior == "Низкий"){
-            if (massiv[i].completed) {
-                list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data, i); 
-            } else{
-                list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data, i);
-            }
-          }
-      }
-    }
-    if (checkbox4.checked== true && checkbox3.checked && checkbox2.checked == false){
-         massiv2 = [];
-      for (let i = 0; i<massiv.length; i++){
-          if(massiv[i].prior == "Высокий" || massiv[i].prior == "Средний"){
-            if (massiv[i].completed) {
-                list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data,  i); 
-            } else{
-                list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data,  i);
-            }
-          }
-      }
-    }
-    if (checkbox4.checked== true && checkbox2.checked == false && checkbox3.checked == false){
-         massiv2 = [];
-      for (let i = 0; i<massiv.length; i++){
-          if(massiv[i].prior == "Высокий"){
-            if (massiv[i].completed) {
-                list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data,  i); 
-            } else{
-                list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data,  i);
-            }
-          }
-      }
-    }
-    if (select2.value == "Недавние"){
-        list.innerHTML = "";
-        massiv2.reverse();
-        for (let i = 0; i<count; i++){
-            for (let j=0; j< count; j++){
-                if (massiv2[i] == massiv[j].data){
-                    if (massiv[i].completed) {
-                        list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data,  i); 
-                    } else{
-                        list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data,  i);
-                    }
-                };
-            };
-        };
-    }
-    if (select2.value == "Cтарые"){
-        list.innerHTML = "";
-        for (let i = 0; i<count; i++){
-            for (let j=0; j< count; j++){
-                if (massiv2[i] == massiv[j].data){
-                    if (massiv[i].completed) {
-                        list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data,  i); 
-                    } else{
-                        list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data,  i);
-                    }
-                };
-            };
-        };
-    }
+function getCheckedHigh() {
+    sorting(checkbox4,checkbox3,checkbox2);
 }
 
 function getChecked() {
-    Check(checkbox2);
-    Check(checkbox3);
-    Check(checkbox4);
+    check(checkbox2);
+    check(checkbox3);
+    check(checkbox4);
     list.innerHTML = "";
     for (let i = 0; i<massiv.length; i++){
         if (massiv[i].completed) {
-            list.innerHTML += Create_d(massiv[i].text, massiv[i].prior, massiv[i].data,  i); 
+            list.innerHTML += createD(massiv[i].text, massiv[i].prior, massiv[i].data,  i); 
         } else{
-            list.innerHTML += Create_F(massiv[i].text, massiv[i].prior, massiv[i].data,  i);
+            list.innerHTML += createF(massiv[i].text, massiv[i].prior, massiv[i].data,  i);
         }
         }
     
