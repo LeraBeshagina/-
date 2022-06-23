@@ -42,25 +42,25 @@
         <div class = "Sort">
             <div class = "checkbox">
                 <div> 
-                    <input type="checkbox"  class="checkbox_val" checked onclick="getChecked()" id ="Choice1" name = "sort" value="Все"> 
+                    <input type="checkbox"  class="checkboxVal" checked onclick="getChecked()" id ="Choice1" name = "sort" value="Все"> 
                     <lebel for = "Choice1">Все</lebel>
                 </div>
                 <div> 
-                    <input type="checkbox"  class="checkbox_val" onclick="getChecked_Low()" id ="Choice2"   name = "sort" value="Низкий"> 
+                    <input type="checkbox"  class="checkboxVal" onclick="getCheckedLow()" id ="Choice2"   name = "sort" value="Низкий"> 
                     <lebel for = "Choice2">Низкий</lebel>
                 </div>
                 <div> 
-                    <input type="checkbox" class="checkbox_val" onclick="getChecked_Medium()" id ="Choice3"  name = "sort" value="Средний"> 
+                    <input type="checkbox" class="checkboxVal" onclick="getCheckedMedium()" id ="Choice3"  name = "sort" value="Средний"> 
                     <lebel for = "Choice3">Средний</lebel>
                 </div>
                 <div> 
-                    <input type="checkbox" class="checkbox_val" id ="Choice4" onclick="getChecked_High()" name = "sort" value="Высокий"> 
+                    <input type="checkbox" class="checkbox_val" id ="Choice4" onclick="getCheckedHigh()" name = "sort" value="Высокий"> 
                     <lebel for = "Choice4">Высокий</lebel>
                 </div>
             </div>
 
             <div class = "select2">
-                <select class="filter2" onclick="Sort()">
+                <select class="filter2" onclick="sort()">
                     <option value="Все">Сортировка</option>
                     <option value="Недавние">Недавние</option>
                     <option value="Старые">Старые</option>
